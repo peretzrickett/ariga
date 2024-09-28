@@ -2,7 +2,7 @@ schema "public" {}
 
 table "users" {
     column "id" {
-        type = serial()
+        type = serial
         null = false
     }
     column "name" {
@@ -31,15 +31,15 @@ table "users" {
         unique  = true
         columns = ["email"]
     }
+}
 
-    sql {
-        file = "./trigger_updated_at.sql"
-    }
+sql {
+    file = "./trigger_updated_at.sql"
 }
 
 table "addresses" {
     column "id" {
-        type = serial()
+        type = serial
         null = false
     }
     column "street" {
@@ -51,7 +51,7 @@ table "addresses" {
         null = false
     }
     column "user_id" {
-        type = int()
+        type = int
         null = false
     }
 
@@ -64,8 +64,8 @@ table "addresses" {
         references = table.users.column.id
         on_delete  = "CASCADE"
     }
+}
 
-    sql "user_addresses_materialized_view" {
-        file = "./mv_addresses.sql"
-    }
+sql "user_addresses_materialized_view" {
+    file = "./mv_addresses.sql"
 }
