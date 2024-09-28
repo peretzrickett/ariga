@@ -1,8 +1,8 @@
 data "composite_schema" "my_schema" {
-  sources = [
+  schemas = [
     {
-      name = "orm_schema"
-      url  = "file://./src/orm_schema.sql"
+      name = "orm_model"
+      url  = "file://./src/orm_model.hcl"
     },
     {
       name = "additional_sql"
