@@ -1,7 +1,4 @@
 env "local" {
-  src = [
-    "file://./src/orm_model.hcl",
-    "file://./src/extra.sql",
-  ]
+  src = "file://./src/schema.hcl"
   url = "postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable"
 }
