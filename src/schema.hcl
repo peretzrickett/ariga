@@ -2,24 +2,24 @@ schema "public" {}
 
 table "users" {
     column "id" {
-        type = "serial"
+        type = serial()
         null = false
     }
     column "name" {
-        type = "varchar(255)"
+        type = varchar(255)
         null = false
     }
     column "email" {
-        type = "varchar(255)"
+        type = varchar(255)
         null = false
     }
     column "created_at" {
-        type    = "timestamp with time zone"
+        type    = timestamptz()
         null    = false
-        default = "now()"
+        default = sql("now()")
     }
     column "updated_at" {
-        type = "timestamp with time zone"
+        type = timestamptz()
         null = true
     }
 
@@ -39,19 +39,19 @@ table "users" {
 
 table "addresses" {
     column "id" {
-        type = "serial"
+        type = serial()
         null = false
     }
     column "street" {
-        type = "varchar(255)"
+        type = varchar(255)
         null = false
     }
     column "city" {
-        type = "varchar(255)"
+        type = varchar(255)
         null = false
     }
     column "user_id" {
-        type = "int"
+        type = int()
         null = false
     }
 
