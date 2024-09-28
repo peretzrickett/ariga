@@ -1,6 +1,7 @@
 schema "public" {}
 
 table "users" {
+    schema = schema.public
     column "id" {
         type = serial
         null = false
@@ -24,20 +25,17 @@ table "users" {
     }
 
     primary_key {
-        columns = ["id"]
+        columns = [column.id]
     }
 
     index "idx_users_email" {
         unique  = true
-        columns = ["email"]
+        columns = [column.email]
     }
 }
 
-sql {
-    file = "./trigger_updated_at.sql"
-}
-
 table "addresses" {
+    schema = schema.public
     column "id" {
         type = serial
         null = false
@@ -56,16 +54,13 @@ table "addresses" {
     }
 
     primary_key {
-        columns = ["id"]
+        columns = [column.id]
     }
 
     foreign_key "fk_user" {
-        columns    = ["user_id"]
-        references = table.users.column.id
-        on_delete  = "CASCADE"
+        columns     = [column.user_id]
+        ref_columns = [table.users.column.id]
+        on_delete   = CASCADE
+        on_update   = CASCADE
     }
-}
-
-sql "user_addresses_materialized_view" {
-    file = "./mv_addresses.sql"
 }
