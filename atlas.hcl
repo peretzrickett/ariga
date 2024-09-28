@@ -1,9 +1,9 @@
 data "composite_schema" "my_project" {
   schema "public" {
-    url = "file:./src/schema.hcl"
+    url = "file://./src/schema.hcl"
   }
   schema "functional" {
-    url = "file:./src/functional.sql"
+    url = "file://./src/functional.sql"
   }
 }
 
