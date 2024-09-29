@@ -8,7 +8,7 @@ data "composite_schema" "my_project" {
 }
 
 docker "postgres" "dev" {
-  image  = "postgres:17"
+  image  = "postgres:latest"
   baseline = <<SQL
    CREATE SCHEMA "auth";
    CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA "auth";
