@@ -34,6 +34,6 @@ jobs:
           cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
       - uses: ariga/atlas-action/schema/test@v1
         with:
-          dev-url: docker://postgres:pass@localhost:5433/dev
+          dev-url: docker://postgres/latest/dev
           env: local
           url: postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable
