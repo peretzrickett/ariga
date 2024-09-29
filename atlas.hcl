@@ -27,3 +27,15 @@ env "local" {
     }
   }
 }
+
+env "runner" {
+  src = data.composite_schema.my_project.url
+  url = "postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable"
+  dev = docker.postgres.dev.url
+
+  test {
+    schema {
+      src = ["./tests/schema.test.hcl"]
+    }
+  }
+}
