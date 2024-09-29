@@ -19,7 +19,7 @@ jobs:
           POSTGRES_DB: dev
           POSTGRES_PASSWORD: pass
         ports:
-          - 5433:5433
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -34,6 +34,6 @@ jobs:
           cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
       - uses: ariga/atlas-action/schema/test@v1
         with:
-          dev-url: postgres://postgres:pass@localhost:5433/dev
+          dev-url: postgres://postgres:pass@localhost:5432/dev
           env: runner
           config: file://atlas.hcl
