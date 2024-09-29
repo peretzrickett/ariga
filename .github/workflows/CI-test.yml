@@ -11,21 +11,21 @@ on:
 #       - 'migrations/*'
 jobs:
   test:
-    # services:
-    #   # Spin up a postgres:latest container to be used as the dev-database for analysis.
-    #   postgres:
-    #     image: postgres:latest
-    #     env:
-    #       POSTGRES_DB: dev
-    #       POSTGRES_PASSWORD: pass
-    #     ports:
-    #       - 5433:5433
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-start-period 10s
-    #       --health-timeout 5s
-    #       --health-retries 5
+    services:
+      # Spin up a postgres:latest container to be used as the dev-database for analysis.
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: dev
+          POSTGRES_PASSWORD: pass
+        ports:
+          - 5433:5433
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-start-period 10s
+          --health-timeout 5s
+          --health-retries 5
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +34,6 @@ jobs:
           cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
       - uses: ariga/atlas-action/schema/test@v1
         with:
-          dev-url: docker://postgres/latest/dev
+          dev-url: postgres://postgres:pass@localhost:5433/dev
           env: local
           config: file://atlas.hcl
