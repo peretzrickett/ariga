@@ -12,9 +12,9 @@ on:
 jobs:
   test:
     services:
-      # Spin up a postgres:17 container to be used as the dev-database for analysis.
+      # Spin up a postgres:latest container to be used as the dev-database for analysis.
       postgres:
-        image: postgres:17
+        image: postgres:latest
         env:
           POSTGRES_DB: dev
           POSTGRES_PASSWORD: pass
