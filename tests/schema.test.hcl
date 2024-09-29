@@ -1,15 +1,8 @@
-test "schema" "populate_data" {
+test "schema" "updated_at_is_null" {
 
   exec {
     sql = file("populate.sql")
   }
-
-  log {
-    message = "Populated database with test data"
-  }
-}
-
-test "schema" "updated_at_is_null" {
 
   assert {
     sql = "SELECT (COUNT(*) = 0) FROM public.users WHERE updated_at IS NOT NULL"
@@ -18,6 +11,10 @@ test "schema" "updated_at_is_null" {
 }
 
 test "schema" "updated_at_updated_by_trigger" {
+
+  exec {
+    sql = file("populate.sql")
+  }
 
   exec {
     sql = "UPDATE public.users SET name = 'Alice Smith Updated' WHERE email = 'alice@example.com'"
@@ -32,13 +29,17 @@ test "schema" "updated_at_updated_by_trigger" {
 test "schema" "user_addresses_count_as_expected" {
 
   exec {
+    sql = file("populate.sql")
+  }
+
+  exec {
     sql = "REFRESH MATERIALIZED VIEW public.user_addresses"
   }
 
   for_each = [
-    {input: "alice@example.com", expected: "2"},
-    {input: "bob@example.com", expected: "1"},
-    {input: "carol@example.com", expected: "2"}
+    {input: "Alice Smith", expected: "2"},
+    {input: "Bob Johnson", expected: "1"},
+    {input: "Carol Williams", expected: "2"}
   ]
 
   log {
@@ -46,7 +47,7 @@ test "schema" "user_addresses_count_as_expected" {
   }
 
   exec {
-    sql = "SELECT address_count::TEXT FROM public.user_addresses WHERE email = '${each.value.input}'"
+    sql = "SELECT address_count::TEXT FROM public.user_addresses WHERE name = '${each.value.input}'"
     output = "${each.value.expected}"
   }
 }
