@@ -35,5 +35,5 @@ jobs:
       - uses: ariga/atlas-action/schema/test@v1
         with:
           dev-url: postgres://postgres:pass@localhost:5433/dev
-          env: local
+          env: runner
           config: file://atlas.hcl
