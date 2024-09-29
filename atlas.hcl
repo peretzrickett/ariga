@@ -20,4 +20,10 @@ env "local" {
   src = data.composite_schema.my_project.url
   url = "postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable"
   dev = docker.postgres.dev.url
+
+  test {
+    schema {
+      src = ["./tests/schema.test.hcl"]
+    }
+  }
 }
