@@ -36,4 +36,4 @@ jobs:
         with:
           dev-url: docker://postgres/latest/dev
           env: local
-          url: postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable
+          config: file://atlas.hcl
