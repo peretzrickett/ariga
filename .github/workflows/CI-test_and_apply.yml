@@ -43,3 +43,4 @@ jobs:
           dev-url: postgres://postgres:postgres@localhost:5432/dev?sslmode=disable
           config: file://atlas.hcl
           env: runner
+          auto-approve: true
