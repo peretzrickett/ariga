@@ -31,7 +31,7 @@ jobs:
       - name: Test Atlas Schema
         uses: ariga/atlas-action/schema/test@v1
         with:
-          dev-url: postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable
+          dev-url: postgres://postgres:pass@localhost:5432/my_database?sslmode=disable
           env: runner
           config: file://atlas.hcl
 
@@ -40,7 +40,7 @@ jobs:
         uses: ariga/atlas-action/schema/apply@v1
         with:
           url: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
-          dev-url: postgres://postgres:postgres@localhost:5432/dev?sslmode=disable
+          dev-url: postgres://postgres:pass@localhost:5432/dev?sslmode=disable
           config: file://atlas.hcl
           env: runner
           auto-approve: true
