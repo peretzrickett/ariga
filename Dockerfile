@@ -1,7 +1,9 @@
+FROM myoung34/github-runner:latest
+
 # Add build argument for the token
 ARG RUNNER_TOKEN
-
-FROM myoung34/github-runner:latest
+ARG REPO_URL
+ARG ATLAS_TOKEN
 
 # Create a non-root user (githubrunner)
 RUN useradd -m githubrunner && passwd -d githubrunner && usermod -aG sudo githubrunner
@@ -10,17 +12,14 @@ RUN useradd -m githubrunner && passwd -d githubrunner && usermod -aG sudo github
 RUN chown -R githubrunner:githubrunner /actions-runner
 
 # Switch to the non-root user and configure the runner
-USER githubrunner
-RUN /actions-runner/config.sh --url https://github.com/peretzrickett/ariga --token ${RUNNER_TOKEN} --unattended --replace
-
-# Switch back to root to continue setup
-USER root
+RUN su - githubrunner -c "/actions-runner/config.sh --name my_runner --url $REPO_URL --token $RUNNER_TOKEN --unattended --replace"
 
 # Install Atlas, Docker, Supervisor, etc.
 RUN apt-get update && apt-get install -y curl git docker.io supervisor
 
 # Install Atlas
 RUN curl -sSf https://atlasgo.sh | sh
+RUN atlas login --token $ATLAS_TOKEN
 
 # Supervisor configuration
 RUN echo -e "[supervisord]\n\
@@ -37,7 +36,6 @@ stderr_logfile=/var/log/dockerd_stderr.log\n\
 [program:github-runner]\n\
 command=/actions-runner/bin/runsvc.sh\n\
 directory=/actions-runner/\n\
-user=githubrunner\n\
 autostart=true\n\
 autorestart=true\n\
 stdout_logfile=/var/log/github-runner_stdout.log\n\

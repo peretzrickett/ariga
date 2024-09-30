@@ -29,9 +29,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - uses: ariga/setup-atlas@v0
-        with:
-          cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
+    #   - uses: ariga/setup-atlas@v0
+    #     with:
+    #       cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
       - uses: ariga/atlas-action/schema/test@v1
         with:
           dev-url: postgres://postgres:pass@localhost:5432/dev

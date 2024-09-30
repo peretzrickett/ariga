@@ -1,32 +1,35 @@
 services:
-  # my_postgres:
-  #   image: postgres:latest
-  #   container_name: my_postgres
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: my_database
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - ./src/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
-  #   networks:
-  #     - my_network
+  my_postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: my_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    networks:
+      - my_network
 
   github-runner:
     image: github-runner:latest
     build:
       context: .
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile
       args:
+        REPO_URL: ${REPO_URL}
         RUNNER_TOKEN: ${RUNNER_TOKEN}
+        ATLAS_TOKEN: ${ATLAS_TOKEN}
     container_name: github-runner
     privileged: true
     environment:
-      REPO_URL: "https://github.com/peretzrickett/ariga"
+      REPO_URL: ${REPO_URL}
       RUNNER_NAME: "my-runner"
-      RUNNER_TOKEN: "${RUNNER_TOKEN}"
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
       RUNNER_WORKDIR: "/tmp/github-runner"
+      ATLAS_TOKEN: ${ATLAS_TOKEN}
       LABELS: "self-hosted,Linux,X64"
     networks:
       - my_network
