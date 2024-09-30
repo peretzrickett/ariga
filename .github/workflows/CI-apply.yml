@@ -1,0 +1,41 @@
+name: Atlas CI Apply
+
+on:
+  pull_request:
+    types: [closed]  # Trigger on closed pull request (this includes merged PRs)
+    branches:
+      - main  # Trigger on pull requests targeting the main branch
+
+jobs:
+  apply:
+    runs-on: self-hosted
+
+    if: github.event.pull_request.merged == true  # Only proceed if the PR was merged
+    services:
+      # Spin up a postgres:latest container to be used as the dev-database for analysis.
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: dev
+          POSTGRES_PASSWORD: pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-start-period 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Apply Atlas Schema Changes
+        uses: ariga/atlas-action/schema/apply@v1
+        with:
+          url: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
+          dev-url: postgres://postgres:pass@localhost:5432/dev?sslmode=disable
+          config: file://atlas.hcl
+          env: runner
+          auto-approve: true
