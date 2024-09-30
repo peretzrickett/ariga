@@ -1,0 +1,45 @@
+name: Atlas CI Test and Apply
+
+on:
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests targeting the main branch
+
+jobs:
+  test-and-apply:
+    services:
+        # Spin up a postgres:latest container to be used as the dev-database for analysis.
+        postgres:
+          image: postgres:latest
+          env:
+            POSTGRES_DB: dev
+            POSTGRES_PASSWORD: pass
+          ports:
+            - 5432:5432
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-start-period 10s
+            --health-timeout 5s
+            --health-retries 5
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Test Atlas Schema
+        uses: ariga/atlas-action/schema/test@v1
+        with:
+          dev-url: postgres://postgres:postgres@localhost:5432/my_database?sslmode=disable
+          env: runner
+          config: file://atlas.hcl
+
+      - name: Apply Atlas Schema Changes
+        if: ${{ github.event.pull_request.merged == true }} # Only apply after the PR is merged
+        uses: ariga/atlas-action/schema/apply@v1
+        with:
+          url: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
+          dev-url: postgres://postgres:postgres@localhost:5432/dev?sslmode=disable
+          config: file://atlas.hcl
+          env: runner
