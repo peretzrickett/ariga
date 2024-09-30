@@ -14,21 +14,23 @@ services:
   #     - my_network
 
   github-runner:
-    image: ubuntu:22.04
+    image: github-runner:latest
     build:
       context: .
       dockerfile: Dockerfile 
+      args:
+        RUNNER_TOKEN: ${RUNNER_TOKEN}
     container_name: github-runner
     privileged: true
     environment:
       REPO_URL: "https://github.com/peretzrickett/ariga"
       RUNNER_NAME: "my-runner"
-      RUNNER_TOKEN: "AATMFF7FK3LYPOP2IPE5JPTG7IWBC"
+      RUNNER_TOKEN: "${RUNNER_TOKEN}"
       RUNNER_WORKDIR: "/tmp/github-runner"
       LABELS: "self-hosted,Linux,X64"
     networks:
       - my_network
-    entrypoint: /usr/local/bin/start-runner.sh
+    entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 networks:
   my_network:
