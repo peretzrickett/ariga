@@ -16,6 +16,7 @@ EXECUTE FUNCTION public.update_user_updated_at();
 -- Create materialized view
 CREATE MATERIALIZED VIEW IF NOT EXISTS public.user_addresses AS
 SELECT
+  u.email,
   u.id AS user_id,
   u.name,
   COUNT(a.id) AS address_count
