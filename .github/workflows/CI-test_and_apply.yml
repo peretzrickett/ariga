@@ -31,7 +31,7 @@ jobs:
       - name: Test Atlas Schema
         uses: ariga/atlas-action/schema/test@v1
         with:
-          dev-url: postgres://postgres:pass@localhost:5432/my_database?sslmode=disable
+          dev-url: postgres://postgres:pass@localhost:5432/dev?sslmode=disable
           env: runner
           config: file://atlas.hcl
 
