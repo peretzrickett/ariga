@@ -1,6 +1,14 @@
+data "external_schema" "sqlalchemy" {
+  program = [
+    "atlas-provider-sqlalchemy",
+    "--path", "./orm",
+    "--dialect", "postgresql"
+  ]
+}
+
 data "composite_schema" "my_project" {
-  schema "public" {
-    url = "file://./src/schema.hcl"
+  schema "orm " {
+    url = data.external_schema.sqlalchemy.url
   }
   schema "functional" {
     url = "file://./src/functional.sql"
