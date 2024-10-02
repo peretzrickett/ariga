@@ -7,7 +7,7 @@ data "external_schema" "sqlalchemy" {
 }
 
 data "composite_schema" "my_project" {
-  schema "orm " {
+  schema "public " {
     url = data.external_schema.sqlalchemy.url
   }
   schema "functional" {
