@@ -36,23 +36,15 @@ RUN apt-get update && apt-get install -y \
     tk-dev \
     libffi-dev \
     liblzma-dev \
+    python3 \
     python3-pip
 
-# Install pyenv and Python 3.11.5
-RUN curl https://pyenv.run | bash && \
-    export PATH="$HOME/.pyenv/bin:$PATH" && \
-    eval "$(pyenv init --path)" && \
-    eval "$(pyenv init -)" && \
-    eval "$(pyenv virtualenv-init -)" && \
-    pyenv install 3.11.5 && \
-    pyenv global 3.11.5
-
-# Set Python in PATH for all users, including githubrunner
-RUN echo 'export PATH="/home/githubrunner/.pyenv/versions/3.11.5/bin:$PATH"' >> /home/githubrunner/.bashrc
+# Install requirements globally
+COPY requirements.txt .
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
 
 # Make python point to python3 by default
 RUN ln -s /usr/bin/python3 /usr/bin/python
-
 
 # Install Atlas
 RUN curl -sSf https://atlasgo.sh | sh
@@ -76,8 +68,7 @@ directory=/actions-runner/\n\
 autostart=true\n\
 autorestart=true\n\
 stdout_logfile=/var/log/github-runner_stdout.log\n\
-stderr_logfile=/var/log/github-runner_stderr.log\n\
-environment=PYENV_ROOT=\"/root/.pyenv\",PATH=\"/root/.pyenv/bin:/root/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games\",PYTHON_VERSION=\"3.11.5\"" > /etc/supervisor/supervisord.conf
+stderr_logfile=/var/log/github-runner_stderr.log\n" > /etc/supervisor/supervisord.conf
 
 # Set entrypoint
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

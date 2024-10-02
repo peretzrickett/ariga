@@ -30,14 +30,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Change ownership of _work directory
-        run: |
-          sudo chown -R githubrunner:githubrunner $GITHUB_WORKSPACE
-          sudo chmod -R 755 $GITHUB_WORKSPACE
+      # - name: Change ownership of _work directory
+      #   run: |
+      #     sudo chown -R githubrunner:githubrunner $GITHUB_WORKSPACE
+      #     sudo chmod -R 755 $GITHUB_WORKSPACE
       - name: Install dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          # python -m venv venv
+          # source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test Atlas Schema
