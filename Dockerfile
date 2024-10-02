@@ -36,15 +36,24 @@ RUN apt-get update && apt-get install -y \
     tk-dev \
     libffi-dev \
     liblzma-dev \
-    python3 \
-    python3-pip
+    python3.9 \
+    python3.9-dev \
+    python3.9-venv \
+    python3.9-distutils \
+    python3-pip \
+    && apt-get clean
 
-# Install requirements globally
+# Update the alternatives system to point to Python 3.9 as the default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 2 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+# Fix potential issue if symbolic link already exists
+RUN [ -L /usr/bin/python ] || ln -s /usr/bin/python3 /usr/bin/python
+
+# Upgrade pip and install requirements
+RUN python3 -m pip install --upgrade pip
 COPY requirements.txt .
 RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
-
-# Make python point to python3 by default
-RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install Atlas
 RUN curl -sSf https://atlasgo.sh | sh
