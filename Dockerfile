@@ -40,13 +40,19 @@ RUN apt-get update && apt-get install -y \
 
 # Install the specific Python version (e.g., 3.11.5)
 RUN curl https://pyenv.run | bash && \
-    export PATH="$HOME/.pyenv/bin:$PATH" && \
+    export PYENV_ROOT="$HOME/.pyenv" && \
+    export PATH="$PYENV_ROOT/bin:$PATH" && \
     eval "$(pyenv init --path)" && \
     eval "$(pyenv init -)" && \
     eval "$(pyenv virtualenv-init -)" && \
     pyenv install 3.11.5 && \
-    pyenv global 3.11.5
-    
+    pyenv global 3.11.5 && \
+    pyenv rehash && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && \
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
+    echo 'eval "$(pyenv init --path)"' >> ~/.bashrc && \
+    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
 # Set the PATH environment variable to ensure Python is available
 ENV PATH="/root/.pyenv/versions/3.11.5/bin:/root/.pyenv/shims:/root/.pyenv/bin:$PATH"
 
@@ -72,7 +78,8 @@ directory=/actions-runner/\n\
 autostart=true\n\
 autorestart=true\n\
 stdout_logfile=/var/log/github-runner_stdout.log\n\
-stderr_logfile=/var/log/github-runner_stderr.log" > /etc/supervisor/supervisord.conf
+stderr_logfile=/var/log/github-runner_stderr.log\n\
+environment=PYENV_ROOT=\"/root/.pyenv\",PATH=\"/root/.pyenv/bin:/root/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games\",PYTHON_VERSION=\"3.11.5\"" > /etc/supervisor/supervisord.conf
 
 # Set entrypoint
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
