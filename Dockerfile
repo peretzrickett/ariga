@@ -38,23 +38,21 @@ RUN apt-get update && apt-get install -y \
     liblzma-dev \
     python3-pip
 
-# Install the specific Python version (e.g., 3.11.5)
+# Install pyenv and Python 3.11.5
 RUN curl https://pyenv.run | bash && \
-    export PYENV_ROOT="$HOME/.pyenv" && \
-    export PATH="$PYENV_ROOT/bin:$PATH" && \
+    export PATH="$HOME/.pyenv/bin:$PATH" && \
     eval "$(pyenv init --path)" && \
     eval "$(pyenv init -)" && \
     eval "$(pyenv virtualenv-init -)" && \
     pyenv install 3.11.5 && \
-    pyenv global 3.11.5 && \
-    pyenv rehash && \
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && \
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
-    echo 'eval "$(pyenv init --path)"' >> ~/.bashrc && \
-    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+    pyenv global 3.11.5
 
-# Set the PATH environment variable to ensure Python is available
-ENV PATH="/root/.pyenv/versions/3.11.5/bin:/root/.pyenv/shims:/root/.pyenv/bin:$PATH"
+# Set Python in PATH for all users, including githubrunner
+RUN echo 'export PATH="/home/githubrunner/.pyenv/versions/3.11.5/bin:$PATH"' >> /home/githubrunner/.bashrc
+
+# Make python point to python3 by default
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 
 # Install Atlas
 RUN curl -sSf https://atlasgo.sh | sh
