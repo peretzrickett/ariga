@@ -40,6 +40,7 @@ jobs:
           # source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+          export DATABASE_URL=postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
       - name: Test Atlas Schema
         uses: ariga/atlas-action/schema/test@v1
         with:
