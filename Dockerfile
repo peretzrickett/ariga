@@ -47,8 +47,8 @@ RUN curl https://pyenv.run | bash && \
     pyenv install 3.11.5 && \
     pyenv global 3.11.5
     
-# Install Atlas, Docker, Supervisor, etc.
-RUN apt-get update && apt-get install -y curl git docker.io supervisor
+# Set the PATH environment variable to ensure Python is available
+ENV PATH="/root/.pyenv/versions/3.11.5/bin:/root/.pyenv/shims:/root/.pyenv/bin:$PATH"
 
 # Install Atlas
 RUN curl -sSf https://atlasgo.sh | sh
