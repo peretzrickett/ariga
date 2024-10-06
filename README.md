@@ -1,4 +1,4 @@
-```md
+md
 # GitHub Runner with PostgreSQL and Atlas Integration
 
 This project provides a development environment for setting up a self-hosted GitHub Runner that interacts with PostgreSQL via Docker, Supervisor, and Atlas. The runner is pre-configured to support database testing and schema management workflows using Ariga's Atlas.
@@ -20,7 +20,6 @@ Ensure you have the following installed on your host system:
    RUNNER_TOKEN=your_github_runner_token
    REPO_URL=https://github.com/your_username/your_repo
    ATLAS_TOKEN=your_atlas_token
-   ```
 
 - `RUNNER_TOKEN`: The token you retrieve from GitHub to register the runner. Go to your repository settings under **Actions** -> **Runners** and generate a token.
 - `REPO_URL`: The repository URL where the runner will be attached.
@@ -77,5 +76,3 @@ This workflow applies any database schema changes to the main PostgreSQL instanc
 
 ---
 For more details on each command used, refer to the respective documentation for [GitHub Actions](https://docs.github.com/en/actions), [Atlas](https://atlasgo.io/), and [PostgreSQL](https://www.postgresql.org/).
-
-```
