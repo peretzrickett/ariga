@@ -22,6 +22,7 @@ services:
         REPO_URL: ${REPO_URL}
         RUNNER_TOKEN: ${RUNNER_TOKEN}
         ATLAS_TOKEN: ${ATLAS_TOKEN}
+        DATABASE_URL: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
     container_name: github-runner
     privileged: true
     environment:
@@ -31,6 +32,7 @@ services:
       RUNNER_WORKDIR: "/tmp/github-runner"
       ATLAS_TOKEN: ${ATLAS_TOKEN}
       LABELS: "self-hosted,Linux,X64"
+      DATABASE_URL: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
     networks:
       - my_network
     entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

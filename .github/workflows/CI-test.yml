@@ -30,12 +30,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-    #   - uses: ariga/setup-atlas@v0
-    #     with:
-    #       cloud-token: ${{ secrets.ATLAS_CLOUD_TOKEN }}
+      # - name: Change ownership of _work directory
+      #   run: |
+      #     sudo chown -R githubrunner:githubrunner $GITHUB_WORKSPACE
+      #     sudo chmod -R 755 $GITHUB_WORKSPACE
+      - name: Install dependencies
+        run: |
+          # python -m venv venv
+          # source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
       - name: Test Atlas Schema
         uses: ariga/atlas-action/schema/test@v1
         with:
+          url: postgres://postgres:postgres@my_postgres:5432/my_database?sslmode=disable
           dev-url: postgres://postgres:pass@localhost:5432/dev?sslmode=disable
           env: runner
           config: file://atlas.hcl

@@ -7,8 +7,8 @@ data "external_schema" "sqlalchemy" {
 }
 
 data "composite_schema" "my_project" {
-  schema "public" {
-    url = "file://./src/schema.hcl"
+    schema "public " {
+    url = data.external_schema.sqlalchemy.url
   }
   schema "functional" {
     url = "file://./src/functional.sql"
